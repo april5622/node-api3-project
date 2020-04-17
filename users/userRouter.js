@@ -3,7 +3,7 @@ const users = require("./userDb");
 
 const router = express.Router();
 
-router.post('/', validateUser(), (req, res) => {
+router.post('/', validateUser(), (req, res, next) => {
   users.insert(req.body)
     .then((user) =>{
       res.status(201).json(user)
@@ -17,7 +17,7 @@ router.post('/:id/posts', validateUserId(),validatePost(), (req, res) => {
   res.status(200).json(req.user)
 });
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   const options = {
     sortBy: req.query.sortBy,
     limit: req.query.limit
@@ -36,11 +36,11 @@ router.get('/:id', validateUserId(), (req, res) => {
   res.status(200).json(req.user)
 });
 
-router.get('/:id/posts', validateUserId(), validatePost(), (req, res) => {
+router.get('/:id/posts', validateUserId(), (req, res) => {
   res.status(200).json(req.user)
 });
 
-router.delete('/:id', validateUserId(), (req, res) => {
+router.delete('/:id', validateUserId(), (req, res, next) => {
   users.remove(req.params.id)
     .then((count) => {
       res.status(200).json(count)
@@ -50,7 +50,7 @@ router.delete('/:id', validateUserId(), (req, res) => {
     })
 });
 
-router.put('/:id', validateUserId(), (req, res) => {
+router.put('/:id', validateUserId(), (req, res, next) => {
  users.update(req.params.id, req.body)
   .then((user) => {
     res.status(200).json(user)
